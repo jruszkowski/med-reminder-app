@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# Environment
+.env
+.env.*
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Xcode / iOS build artifacts
+ios/**/*.xcworkspace/xcuserdata/
+ios/**/*.xcodeproj/project.xcworkspace/xcuserdata/
+ios/**/*.xcodeproj/xcshareddata/WorkspaceSettings.xcsettings
+ios/**/*.xcodeproj/xcuserdata/
+ios/**/*.playground/
+DerivedData/
+build/
+
+# JetBrains / editors
+.idea/
+.vscode/
+
+# Logs
+*.log
