@@ -1,0 +1,65 @@
+# Generates MedicationReminder.xcodeproj. On the Mac, from this folder:  bash setup.sh
+#
+# If Xcode says a bundle id or App Group is already taken, replace every
+# "com.joseph.medreminder" in this file AND in Shared/SharedConstants.swift, then re-run setup.sh.
+name: MedicationReminder
+options:
+  bundleIdPrefix: com.joseph.medreminder
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.2.0"
+    CURRENT_PROJECT_VERSION: "1"
+    # Put your 10-character Team ID here (developer.apple.com > Membership) so re-generating
+    # the project keeps your signing team:
+    # DEVELOPMENT_TEAM: ABCDE12345
+targets:
+  MedicationReminder:
+    type: application
+    platform: iOS
+    sources:
+      - path: MedicationReminder
+      - path: Shared
+    info:
+      path: Generated/MedicationReminder-Info.plist
+      properties:
+        CFBundleDisplayName: Med Check-In
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+    entitlements:
+      path: Generated/MedicationReminder.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups: [group.com.joseph.medreminder]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.joseph.medreminder
+        TARGETED_DEVICE_FAMILY: "1"
+    dependencies:
+      - target: MedicationActivityMonitorExtension
+  MedicationActivityMonitorExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: MedicationActivityMonitorExtension
+      - path: Shared
+    info:
+      path: Generated/MedicationActivityMonitorExtension-Info.plist
+      properties:
+        CFBundleDisplayName: MedicationActivityMonitor
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).MedicationActivityMonitor
+    entitlements:
+      path: Generated/MedicationActivityMonitorExtension.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups: [group.com.joseph.medreminder]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.joseph.medreminder.activitymonitor
+        TARGETED_DEVICE_FAMILY: "1"

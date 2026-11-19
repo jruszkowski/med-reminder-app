@@ -7,6 +7,7 @@ struct PairingView: View {
     @ObservedObject var session: AppSession
     let message: String?
 
+    @State private var serverAddress = BackendConfig.baseURL?.absoluteString ?? ""
     @State private var code = ""
     @State private var isPairing = false
 
@@ -16,9 +17,15 @@ struct PairingView: View {
                 .font(.title2)
                 .bold()
 
-            Text("Enter the pairing code from the parent setup.")
+            Text("Enter the server address and the pairing code from the parent setup.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
+
+            TextField("Server address (https://…)", text: $serverAddress)
+                .textFieldStyle(.roundedBorder)
+                .keyboardType(.URL)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
 
             SecureField("Pairing code", text: $code)
                 .textFieldStyle(.roundedBorder)
@@ -28,14 +35,14 @@ struct PairingView: View {
             Button {
                 isPairing = true
                 Task {
-                    await session.pair(code: code)
+                    await session.pair(serverAddress: serverAddress, code: code)
                     isPairing = false
                 }
             } label: {
                 if isPairing { ProgressView() } else { Text("Pair") }
             }
             .buttonStyle(.borderedProminent)
-            .disabled(code.isEmpty || isPairing)
+            .disabled(code.isEmpty || serverAddress.isEmpty || isPairing)
 
             if let message {
                 Text(message).foregroundStyle(.red)

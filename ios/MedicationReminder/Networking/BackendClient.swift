@@ -52,9 +52,9 @@ final class BackendClient {
     }
 
     private func send<T: Decodable>(_ method: String, _ path: String, body: (any Encodable)? = nil) async throws -> T {
-        guard let token = tokenProvider() else { throw BackendError.notPaired }
+        guard let token = tokenProvider(), let baseURL = BackendConfig.baseURL else { throw BackendError.notPaired }
 
-        var request = URLRequest(url: BackendConfig.baseURL.appendingPathComponent(path))
+        var request = URLRequest(url: baseURL.appendingPathComponent(path))
         request.httpMethod = method
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         if let body {

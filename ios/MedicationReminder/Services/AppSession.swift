@@ -21,7 +21,7 @@ final class AppSession: ObservableObject {
     }
 
     func load() async {
-        guard CredentialStore.load() != nil else {
+        guard CredentialStore.load() != nil, BackendConfig.baseURL != nil else {
             phase = .needsPairing(message: nil)
             return
         }
@@ -42,9 +42,14 @@ final class AppSession: ObservableObject {
         }
     }
 
-    func pair(code: String) async {
+    func pair(serverAddress: String, code: String) async {
         let trimmed = code.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
+        guard let url = BackendConfig.validated(serverAddress) else {
+            phase = .needsPairing(message: "Enter the server address, starting with https://")
+            return
+        }
+        BackendConfig.save(url)
         do {
             try CredentialStore.save(trimmed)
         } catch {

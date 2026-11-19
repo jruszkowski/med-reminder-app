@@ -5,7 +5,7 @@ import ManagedSettings
 
 enum SharedConstants {
     /// Must match the App Group capability added to both targets in Xcode.
-    static let appGroupID = "group.com.example.medicationreminder"
+    static let appGroupID = "group.com.joseph.medreminder"
 }
 
 extension DeviceActivityName {
