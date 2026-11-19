@@ -14,19 +14,21 @@ final class AppStartupCoordinator: ObservableObject {
     private let policyManager: ScreenTimePolicyManager
     private var cancellables: Set<AnyCancellable> = []
 
+    // Defaults are created inside the (main-actor) initializer: default-argument
+    // expressions run outside the main actor, so they can't build these objects.
     init(
-        statusService: MedicationStatusService = MedicationStatusService(),
-        authorizationManager: FamilyControlsAuthorizationManager = FamilyControlsAuthorizationManager(),
-        scheduleManager: MedicationScheduleManager = MedicationScheduleManager(),
-        policyManager: ScreenTimePolicyManager = ScreenTimePolicyManager()
+        statusService: MedicationStatusService? = nil,
+        authorizationManager: FamilyControlsAuthorizationManager? = nil,
+        scheduleManager: MedicationScheduleManager? = nil,
+        policyManager: ScreenTimePolicyManager? = nil
     ) {
-        self.statusService = statusService
-        self.authorizationManager = authorizationManager
-        self.scheduleManager = scheduleManager
-        self.policyManager = policyManager
+        self.statusService = statusService ?? MedicationStatusService()
+        self.authorizationManager = authorizationManager ?? FamilyControlsAuthorizationManager()
+        self.scheduleManager = scheduleManager ?? MedicationScheduleManager()
+        self.policyManager = policyManager ?? ScreenTimePolicyManager()
 
         // Re-publish status changes so views only need to observe the coordinator.
-        statusService.objectWillChange
+        self.statusService.objectWillChange
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &cancellables)
     }

@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct ChildCheckInView: View {
     let child: ChildProfile
     @StateObject private var coordinator = AppStartupCoordinator()

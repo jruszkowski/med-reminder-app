@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct RootView: View {
     @ObservedObject var session: AppSession
 

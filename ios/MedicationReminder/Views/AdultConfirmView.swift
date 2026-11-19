@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Runs on the parent's phone (guardian token). The backend refuses confirmations from a
 /// child's device token, so this screen being present in the app is not a bypass.
+@MainActor
 struct AdultConfirmView: View {
     @StateObject private var approvalFlow: AdultApprovalFlow
     @State private var pendingConfirmation: ChildProfile?
